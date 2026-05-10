@@ -4,7 +4,7 @@ import Card from './components/Card'
 
 function App() {
   const [recipes,setRecipes] = useState([])
-
+  const [searchValue, setSearchValue] = useState("")
   const [timerId, setTimerId] = useState(null)
 
 
@@ -12,15 +12,24 @@ function App() {
     clearTimeout(timerId)
     setTimerId(
       setTimeout(() => {
-        fetch('https://dummyjson.com/recipes')
+        fetch(`https://dummyjson.com/recipes/search?q=${searchValue}`)
         .then(res => res.json())
         .then((res) => setRecipes(res.recipes));
       },1000)
     )
-  },[])
+  },[searchValue])
 
   return (
     <>
+      <div className='searchBox'>
+        <input type="search"
+        className='search'
+        placeholder='search pizzas'
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
+        />
+      </div>
+
       <section className='box'>
       {recipes.map((e) => (
         <Card 
